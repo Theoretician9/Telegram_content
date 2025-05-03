@@ -1,98 +1,47 @@
 // server/actions.ts
 
-import { randomUUID } from 'crypto';
-
 /**
- * Результат аутентификации
+ * Заглушка — аутентификация пользователя
  */
-export interface AuthResult {
-  userId: string;
+export async function getAuth(...args: any[]): Promise<{ userId: string }> {
+  // TODO: вытягивать из JWT/сессии
+  return { userId: 'dummy-user-id' };
 }
 
 /**
- * Параметры запроса к мультимодели
- */
-export interface MultimodalRequest {
-  model: string;
-  prompt: string;
-  // любые другие поля, которые потребуются AI-API
-}
-
-/**
- * Ответ от мультимодели
- */
-export interface MultimodalResult {
-  title: string;
-  text: string;
-  imagePrompt: string;
-}
-
-/**
- * Результат помещения задачи в очередь
- */
-export interface QueueTaskResult {
-  id: string;
-}
-
-/**
- * Возможные статусы фоновой задачи
- */
-export type TaskStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED';
-
-/**
- * Ответ при запросе статуса задачи
- */
-export interface TaskStatusResult {
-  status: TaskStatus;
-  error?: { message: string };
-}
-
-/**
- * Заглушка — аутентификация пользователя.
- * Позже сюда можно вставить проверку JWT/сессии.
- */
-export async function getAuth(opts: { required: boolean }): Promise<AuthResult> {
-  if (opts.required) {
-    // TODO: взять userId из JWT / cookies / headers
-    return { userId: 'dummy-user-id' };
-  }
-  return { userId: '' };
-}
-
-/**
- * Заглушка — отправка запроса мультимодели (GPT-4, DALL·E и т.п.)
+ * Заглушка — запрос к мультимодели (GPT, DALL·E и т.п.)
+ * Принимает любые поля, в т.ч. system, prompt, model и т.п.
  */
 export async function requestMultimodalModel(
-  req: MultimodalRequest
-): Promise<MultimodalResult> {
-  // TODO: здесь должен быть реальный вызов к AI-API
+  req: { model: string; prompt: string; [key: string]: any }
+): Promise<{ title: string; text: string; imagePrompt: string; imageUrl?: string }> {
+  // TODO: здесь реальный вызов AI-API
   return {
-    title: 'AI-сгенерированный заголовок',
-    text:  'AI-сгенерированный текст',
+    title: 'Заголовок, сгенерированный AI',
+    text: 'Текст, сгенерированный AI',
     imagePrompt: 'Описание изображения для генератора',
+    imageUrl: undefined, // если нужно
   };
 }
 
 /**
- * Заглушка — запись задачи в очередь на фоновую обработку
+ * Заглушка — постановка фоновой задачи.
+ * Принимает либо (имя задачи, payload), либо просто произвольные аргументы.
  */
-export async function queueTask(
-  taskName: string,
-  payload: unknown
-): Promise<QueueTaskResult> {
-  const id = randomUUID();
-  console.log(`Queued task "${taskName}" with payload:`, payload);
-  // TODO: здесь пушить задачу в реальную очередь (Bull, RabbitMQ и т.п.)
-  return { id };
+export async function queueTask(...args: any[]): Promise<{ id: string }> {
+  // TODO: записать в Bull/RabbitMQ/БД
+  console.log('queueTask args:', args);
+  return { id: 'dummy-task-id' };
 }
 
 /**
- * Заглушка — получение статуса фоновой задачи
+ * Заглушка — проверка статуса фоновой задачи.
+ * Принимает либо строку, либо объект { taskId: string }
  */
-export async function getTaskStatus(
-  input: { taskId: string }
-): Promise<TaskStatusResult> {
-  console.log(`Checking status of task ${input.taskId}`);
-  // TODO: читать реальный статус из БД/очереди
+export async function getTaskStatus(...args: any[]): Promise<{
+  status: 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED';
+  error?: { message: string };
+}> {
+  console.log('getTaskStatus args:', args);
   return { status: 'COMPLETED' };
 }
