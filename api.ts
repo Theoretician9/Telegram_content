@@ -1355,7 +1355,9 @@ import express from 'express';
 
 const app = express();
 app.use(express.json());
-
+app.get('/', (_req, res) => {
+  res.status(200).send('OK');
+});
 // Привяжем ваши экспортированные хэндлеры к HTTP­-эндпоинтам.
 // Здесь нужно подставить именно ваши имена функций и пути:
 
