@@ -13,6 +13,9 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    include: ['react/jsx-runtime', 'react/jsx-dev-runtime']
+  },
   plugins: [react()],
   resolve: {
     alias: {
