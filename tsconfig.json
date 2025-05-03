@@ -8,9 +8,15 @@
     "outDir": "dist",
     "rootDir": ".",
     "strict": true,
-    "skipLibCheck": true,
-    "allowJs": false
+    "skipLibCheck": true
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+  "include": [
+    "api.ts",
+    "server/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts"
+  ]
 }
