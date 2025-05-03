@@ -1,97 +1,73 @@
 // server/actions.ts
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'crypto'
 
-/**
- * Результат аутентификации
- */
+/** Результат аутентификации */
 export interface AuthResult {
-  userId: string;
+  userId: string
 }
 
-/**
- * Параметры запроса к мультимодели
- */
+/** Параметры запроса к мультимодели */
 export interface MultimodalRequest {
-  model: string;
-  prompt: string;
-  // сюда можно добавить любые другие поля, нужные для вызова OpenAI и т.п.
+  model: string
+  prompt: string
 }
 
-/**
- * Ответ от мультимодели
- */
+/** Ответ от мультимодели */
 export interface MultimodalResult {
-  title: string;
-  text: string;
-  imagePrompt: string;
+  title: string
+  text: string
+  imagePrompt: string
 }
 
-/**
- * Результат помещения задачи в очередь
- */
+/** Результат помещения задачи в очередь */
 export interface QueueTaskResult {
-  id: string;
+  id: string
 }
 
-/**
- * Возможные статусы фоновой задачи
- */
-export type TaskStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED';
+/** Возможные статусы фоновой задачи */
+export type TaskStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED'
 
-/**
- * Ответ при запросе статуса задачи
- */
+/** Ответ при запросе статуса задачи */
 export interface TaskStatusResult {
-  status: TaskStatus;
-  error?: { message: string };
+  status: TaskStatus
+  error?: { message: string }
 }
 
-/**
- * Заглушка — аутентификация пользователя.
- * В дальнейшем сюда вставишь проверку JWT или сессии.
- */
+/** Заглушка — аутентификация пользователя */
 export async function getAuth(opts: { required: boolean }): Promise<AuthResult> {
   if (opts.required) {
-    // TODO: взять userId из JWT / cookies / headers
-    return { userId: 'dummy-user-id' };
+    // TODO: вытянуть userId из JWT/кук/хедера
+    return { userId: 'dummy-user-id' }
   }
-  return { userId: '' };
+  return { userId: '' }
 }
 
-/**
- * Заглушка — отправка запроса мультимодели (GPT-4, DALL·E и т.п.)
- */
+/** Заглушка — запрос к мультимодели (GPT-4, DALL·E и т.п.) */
 export async function requestMultimodalModel(
   req: MultimodalRequest
 ): Promise<MultimodalResult> {
-  // TODO: здесь реальный вызов AI-API, например OpenAI
+  // TODO: реальный вызов AI-API
   return {
-    title: 'Заголовок, сгенерированный AI',
-    text: 'Текст, сгенерированный AI',
-    imagePrompt: 'Описание изображения для генератора'
-  };
+    title: 'AI-сгенерированный заголовок',
+    text:  'AI-сгенерированный текст',
+    imagePrompt: 'Описание картинки для генератора'
+  }
 }
 
-/**
- * Заглушка — запись задачи в очередь на фоновую обработку
- */
+/** Заглушка — поставить задачу в очередь */
 export async function queueTask(
   taskName: string,
   payload: unknown
 ): Promise<QueueTaskResult> {
-  const id = randomUUID();
-  // TODO: записать в БД или очередь (Bull, RabbitMQ и т.п.)
-  console.log(`Queued task "${taskName}" with payload:`, payload);
-  return { id };
+  const id = randomUUID()
+  console.log(`Queued task "${taskName}"`, payload)
+  return { id }
 }
 
-/**
- * Заглушка — получение статуса фоновой задачи
- */
+/** Заглушка — проверить статус фоновой задачи */
 export async function getTaskStatus(
   input: { taskId: string }
 ): Promise<TaskStatusResult> {
-  // TODO: читать статус из БД или очереди
-  console.log(`Checking status of task ${input.taskId}`);
-  return { status: 'COMPLETED' };
+  console.log(`Checking status of ${input.taskId}`)
+  return { status: 'COMPLETED' }
 }
