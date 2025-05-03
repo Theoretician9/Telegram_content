@@ -21,20 +21,20 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
-        - name: Deploy via SSH
+      - name: Deploy via SSH
         run: |
-        ssh admin@92.113.144.178 << 'EOF'
-        cd /home/admin/Telegram_content
+          ssh admin@92.113.144.178 << 'EOF'
+            cd /home/admin/Telegram_content
 
         # обновить репозиторий без «мержа» локальных изменений
-        git fetch --all
-        git reset --hard origin/main
-        git clean -fd
+            git fetch --all
+            git reset --hard origin/main
+            git clean -fd
 
         # установить зависимости и собрать проект
-        npm ci
-        npm run build
+            npm ci
+            npm run build
 
         # перезапустить сервис
-        pm2 reload telegram_content
-      EOF
+            pm2 reload telegram_content
+          EOF
