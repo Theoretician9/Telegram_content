@@ -1,0 +1,33 @@
+{
+  "name": "telegram_content",
+  "version": "1.0.0",
+  "description": "Генератор контента для телеграма",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only api.ts",
+    "build": "tsc",
+    "start": "node dist/api.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Theoretician9/Telegram_content.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Theoretician9/Telegram_content/issues"
+  },
+  "homepage": "https://github.com/Theoretician9/Telegram_content#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.15.3",
+    "prisma": "^6.7.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.7.0"
+  }
+}

@@ -1,3 +1,17 @@
+// prisma/schema.prisma
+
+// 1. Подключение к базе — берётся из переменной окружения DATABASE_URL
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// 2. Генерация Prisma Client
+generator client {
+  provider = "prisma-client-js"
+}
+
+
 model User {
   id        String    @id @default(cuid())
   channels  Channel[]
