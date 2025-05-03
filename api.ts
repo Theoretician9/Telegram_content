@@ -1350,3 +1350,38 @@ export async function getGeneratedContent(input: { taskId: string }) {
     }
   }
 }
+// В конец api.ts, после последней функции:
+import express from 'express';
+
+const app = express();
+app.use(express.json());
+
+// Привяжем ваши экспортированные хэндлеры к HTTP­-эндпоинтам.
+// Здесь нужно подставить именно ваши имена функций и пути:
+
+app.post('/api/getChannel', async (req, res) => {
+  try {
+    const result = await getChannel(req.body);
+    res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/api/listChannels', async (_req, res) => {
+  try {
+    const result = await listChannels();
+    res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// И так далее для всех ваших RPC‐функций:
+// addChannel, deleteChannel, updateChannelTheme, getChannelSettings, updateAnalysisSettings, analyzeCompetitiveChannels, getAnalysisStatus, publishImmediately и т.п.
+
+// И наконец — запуск сервера:
+const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+app.listen(port, () => {
+  console.log(`🚀 Server is listening on http://localhost:${port}`);
+});
