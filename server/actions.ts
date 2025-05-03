@@ -1,49 +1,49 @@
 // server/actions.ts
-import { randomUUID } from 'crypto'
+import { randomUUID } from 'crypto';
 
 /**
  * Результат аутентификации
  */
 export interface AuthResult {
-  userId: string
+  userId: string;
 }
 
 /**
  * Параметры запроса к мультимодели
  */
 export interface MultimodalRequest {
-  model: string
-  prompt: string
-  // сюда можно добавить любые другие поля, нужные для вызова
+  model: string;
+  prompt: string;
+  // сюда можно добавить любые другие поля, нужные для вызова OpenAI и т.п.
 }
 
 /**
  * Ответ от мультимодели
  */
 export interface MultimodalResult {
-  title: string
-  text: string
-  imagePrompt: string
+  title: string;
+  text: string;
+  imagePrompt: string;
 }
 
 /**
  * Результат помещения задачи в очередь
  */
 export interface QueueTaskResult {
-  id: string
+  id: string;
 }
 
 /**
- * Статус задачи
+ * Возможные статусы фоновой задачи
  */
-export type TaskStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED'
+export type TaskStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED';
 
 /**
  * Ответ при запросе статуса задачи
  */
 export interface TaskStatusResult {
-  status: TaskStatus
-  error?: { message: string }
+  status: TaskStatus;
+  error?: { message: string };
 }
 
 /**
@@ -53,9 +53,9 @@ export interface TaskStatusResult {
 export async function getAuth(opts: { required: boolean }): Promise<AuthResult> {
   if (opts.required) {
     // TODO: взять userId из JWT / cookies / headers
-    return { userId: 'dummy-user-id' }
+    return { userId: 'dummy-user-id' };
   }
-  return { userId: '' }
+  return { userId: '' };
 }
 
 /**
@@ -64,12 +64,12 @@ export async function getAuth(opts: { required: boolean }): Promise<AuthResult> 
 export async function requestMultimodalModel(
   req: MultimodalRequest
 ): Promise<MultimodalResult> {
-  // TODO: здесь вызов AI-API
+  // TODO: здесь реальный вызов AI-API, например OpenAI
   return {
     title: 'Заголовок, сгенерированный AI',
     text: 'Текст, сгенерированный AI',
-    imagePrompt: 'Описание изображения, чтобы отправить в генератор'
-  }
+    imagePrompt: 'Описание изображения для генератора'
+  };
 }
 
 /**
@@ -79,10 +79,10 @@ export async function queueTask(
   taskName: string,
   payload: unknown
 ): Promise<QueueTaskResult> {
-  const id = randomUUID()
-  // TODO: записать в базу или в очередь (Bull, RabbitMQ и т.п.)
-  console.log(`Queued task "${taskName}" with payload:`, payload)
-  return { id }
+  const id = randomUUID();
+  // TODO: записать в БД или очередь (Bull, RabbitMQ и т.п.)
+  console.log(`Queued task "${taskName}" with payload:`, payload);
+  return { id };
 }
 
 /**
@@ -92,6 +92,6 @@ export async function getTaskStatus(
   input: { taskId: string }
 ): Promise<TaskStatusResult> {
   // TODO: читать статус из БД или очереди
-  console.log(`Checking status of task ${input.taskId}`)
-  return { status: 'COMPLETED' }
+  console.log(`Checking status of task ${input.taskId}`);
+  return { status: 'COMPLETED' };
 }
