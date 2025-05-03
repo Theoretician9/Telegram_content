@@ -1,48 +1,62 @@
 // server/actions.ts
-import { randomUUID } from 'crypto'
 
-/** Результат аутентификации */
+import { randomUUID } from 'crypto';
+
+/**
+ * Результат аутентификации
+ */
 export interface AuthResult {
-  userId: string
+  userId: string;
 }
 
-/** Параметры запроса к мультимодели */
+/**
+ * Параметры запроса к мультимодели
+ */
 export interface MultimodalRequest {
-  model: string
-  prompt: string
+  model: string;
+  prompt: string;
+  // сюда можно добавить любые другие поля для AI-API
 }
 
-/** Ответ от мультимодели */
+/**
+ * Ответ от мультимодели
+ */
 export interface MultimodalResult {
-  title: string
-  text: string
-  imagePrompt: string
+  title: string;
+  text: string;
+  imagePrompt: string;
 }
 
-/** Результат помещения задачи в очередь */
+/**
+ * Результат помещения задачи в очередь
+ */
 export interface QueueTaskResult {
-  id: string
+  id: string;
 }
 
-/** Возможные статусы фоновой задачи */
-export type TaskStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED'
+/**
+ * Возможные статусы фоновой задачи
+ */
+export type TaskStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED';
 
-/** Ответ при запросе статуса задачи */
+/**
+ * Ответ при запросе статуса задачи
+ */
 export interface TaskStatusResult {
-  status: TaskStatus
-  error?: { message: string }
+  status: TaskStatus;
+  error?: { message: string };
 }
 
 /**
  * Заглушка — аутентификация пользователя.
- * В дальнейшем сюда вставишь проверку JWT или сессии.
+ * В дальнейшем сюда вставить проверку JWT/сессии.
  */
 export async function getAuth(opts: { required: boolean }): Promise<AuthResult> {
   if (opts.required) {
     // TODO: взять userId из JWT / cookies / headers
-    return { userId: 'dummy-user-id' }
+    return { userId: 'dummy-user-id' };
   }
-  return { userId: '' }
+  return { userId: '' };
 }
 
 /**
@@ -51,12 +65,12 @@ export async function getAuth(opts: { required: boolean }): Promise<AuthResult> 
 export async function requestMultimodalModel(
   req: MultimodalRequest
 ): Promise<MultimodalResult> {
-  // TODO: здесь вызов реального AI-API
+  // TODO: здесь реальный вызов AI-API
   return {
-    title: 'Заголовок, сгенерированный AI',
-    text: 'Текст, сгенерированный AI',
-    imagePrompt: 'Описание изображения для генератора'
-  }
+    title: 'AI-сгенерированный заголовок',
+    text:  'AI-сгенерированный текст',
+    imagePrompt: 'Описание картинки для генератора',
+  };
 }
 
 /**
@@ -66,19 +80,19 @@ export async function queueTask(
   taskName: string,
   payload: unknown
 ): Promise<QueueTaskResult> {
-  const id = randomUUID()
-  // TODO: записать в базу или в очередь (Bull, RabbitMQ и т.п.)
-  console.log(`Queued task "${taskName}" with payload:`, payload)
-  return { id }
+  const id = randomUUID();
+  console.log(`Queued task "${taskName}" with payload:`, payload);
+  // TODO: здесь пушить в реальную очередь (Bull, RabbitMQ…)
+  return { id };
 }
 
 /**
- * Заглушка — получение статуса фоновой задачи
+ * Заглушка — проверка статуса фоновой задачи
  */
 export async function getTaskStatus(
   input: { taskId: string }
 ): Promise<TaskStatusResult> {
-  // TODO: читать статус из БД или очереди
-  console.log(`Checking status of task ${input.taskId}`)
-  return { status: 'COMPLETED' }
+  console.log(`Checking status of task ${input.taskId}`);
+  // TODO: читать статус из базы/очереди
+  return { status: 'COMPLETED' };
 }
