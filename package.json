@@ -4,9 +4,9 @@
   "description": "Генератор контента для телеграма",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only api.ts",
     "build": "tsc",
-    "start": "node dist/api.js"
+    "start": "node dist/api.js",
+    "dev": "ts-node-dev --respawn --transpile-only --project tsconfig.json api.ts"
   },
   "repository": {
     "type": "git",
