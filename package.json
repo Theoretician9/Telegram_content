@@ -28,6 +28,8 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@prisma/client": "^6.7.0"
+    "@prisma/client": "^6.7.0",
+    "express": "^5.1.0",
+    "zod": "^3.24.3"
   }
 }
