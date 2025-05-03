@@ -36,7 +36,6 @@ export interface TaskStatusResult {
 /** Заглушка — аутентификация пользователя */
 export async function getAuth(opts: { required: boolean }): Promise<AuthResult> {
   if (opts.required) {
-    // TODO: вытянуть userId из JWT/кук/хедера
     return { userId: 'dummy-user-id' }
   }
   return { userId: '' }
@@ -46,11 +45,10 @@ export async function getAuth(opts: { required: boolean }): Promise<AuthResult> 
 export async function requestMultimodalModel(
   req: MultimodalRequest
 ): Promise<MultimodalResult> {
-  // TODO: реальный вызов AI-API
   return {
-    title: 'AI-сгенерированный заголовок',
-    text:  'AI-сгенерированный текст',
-    imagePrompt: 'Описание картинки для генератора'
+    title: 'AI-generated title',
+    text: 'AI-generated text',
+    imagePrompt: 'Prompt for image generation',
   }
 }
 
@@ -60,7 +58,7 @@ export async function queueTask(
   payload: unknown
 ): Promise<QueueTaskResult> {
   const id = randomUUID()
-  console.log(`Queued task "${taskName}"`, payload)
+  console.log(`Queued task "${taskName}" with payload:`, payload)
   return { id }
 }
 
@@ -68,6 +66,6 @@ export async function queueTask(
 export async function getTaskStatus(
   input: { taskId: string }
 ): Promise<TaskStatusResult> {
-  console.log(`Checking status of ${input.taskId}`)
+  console.log(`Checking status of task ${input.taskId}`)
   return { status: 'COMPLETED' }
 }
