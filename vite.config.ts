@@ -1,16 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
 
 export default defineConfig({
-  root: 'src',                // говорим Vite, что точка входа — папка src
+  root: resolve(__dirname, 'src'),
   base: '/',                  // базовый URL
   plugins: [react()],
   build: {
-    outDir: '../dist/client', // собирать в dist/client
-    emptyOutDir: true,        // очищать папку перед сборкой
+    outDir: resolve(__dirname, 'dist/client'),
+    emptyOutDir: true,
+    rollupOptions: {
+      input: resolve(__dirname, 'src/index.html'),
+    }
   },
   server: {
-    port: 5173,
+    port: 5173
     host: true                // чтобы был доступ по сети (92.113.144.178)
   }
 })
