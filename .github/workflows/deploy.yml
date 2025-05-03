@@ -1,8 +1,10 @@
+# .github/workflows/deploy.yml
 name: Deploy to Server
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -11,6 +13,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.9.0
@@ -24,21 +28,15 @@ jobs:
 
       - name: Deploy via SSH
         run: |
-          ssh admin@92.113.144.178 << 'EOF'
-            set -e
-
-            # Переходим в директорию приложения
-            cd /home/admin/Telegram_content
-
-            # Подтягиваем все обновления и сбрасываем локальные изменения
-            git fetch --all
+          ssh -o StrictHostKeyChecking=no admin@92.113.144.178 << 'EOF'
+            cd ~/Telegram_content
+            # сбрасываем локальные правки, чтобы git-пулл точно отработал
+            git fetch origin main
             git reset --hard origin/main
-            git clean -fd
-
-            # Чистая установка зависимостей и сборка
+            # ставим зависимости
             npm ci
+            # билдим проект
             npm run build
-
-            # Перезапускаем процесс в PM2
-            pm2 reload telegram_content
+            # перезапускаем только ваше приложение
+            pm2 restart telegram_content
           EOF
