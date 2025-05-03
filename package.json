@@ -4,12 +4,12 @@
   "description": "Генератор контента для телеграма",
   "main": "index.js",
   "scripts": {
-      "build": "tsc",
-      "start": "node dist/api.js",
-      "dev": "ts-node-dev --respawn --transpile-only --project tsconfig.json api.ts",
-      "dev:client": "vite",
-      "build:client": "vite build",
-      "preview:client": "vite preview"
+    "build": "tsc",
+    "start": "node dist/api.js",
+    "dev": "ts-node-dev --respawn --transpile-only --project tsconfig.json api.ts",
+    "dev:client": "vite",
+    "build:client": "vite build",
+    "preview:client": "vite preview"
   },
   "repository": {
     "type": "git",
@@ -25,10 +25,12 @@
   "devDependencies": {
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.3",
+    "@vitejs/plugin-react": "^4.4.1",
     "prisma": "^6.7.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite": "^6.3.4"
   },
   "dependencies": {
     "@prisma/client": "^6.7.0",
