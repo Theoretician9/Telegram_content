@@ -15,7 +15,7 @@ export interface AuthResult {
 export interface MultimodalRequest {
   model: string;
   prompt: string;
-  // сюда можно добавить любые другие поля для AI-API
+  // любые другие поля, которые потребуются AI-API
 }
 
 /**
@@ -49,7 +49,7 @@ export interface TaskStatusResult {
 
 /**
  * Заглушка — аутентификация пользователя.
- * В дальнейшем сюда вставить проверку JWT/сессии.
+ * Позже сюда можно вставить проверку JWT/сессии.
  */
 export async function getAuth(opts: { required: boolean }): Promise<AuthResult> {
   if (opts.required) {
@@ -65,11 +65,11 @@ export async function getAuth(opts: { required: boolean }): Promise<AuthResult> 
 export async function requestMultimodalModel(
   req: MultimodalRequest
 ): Promise<MultimodalResult> {
-  // TODO: здесь реальный вызов AI-API
+  // TODO: здесь должен быть реальный вызов к AI-API
   return {
     title: 'AI-сгенерированный заголовок',
     text:  'AI-сгенерированный текст',
-    imagePrompt: 'Описание картинки для генератора',
+    imagePrompt: 'Описание изображения для генератора',
   };
 }
 
@@ -82,17 +82,17 @@ export async function queueTask(
 ): Promise<QueueTaskResult> {
   const id = randomUUID();
   console.log(`Queued task "${taskName}" with payload:`, payload);
-  // TODO: здесь пушить в реальную очередь (Bull, RabbitMQ…)
+  // TODO: здесь пушить задачу в реальную очередь (Bull, RabbitMQ и т.п.)
   return { id };
 }
 
 /**
- * Заглушка — проверка статуса фоновой задачи
+ * Заглушка — получение статуса фоновой задачи
  */
 export async function getTaskStatus(
   input: { taskId: string }
 ): Promise<TaskStatusResult> {
   console.log(`Checking status of task ${input.taskId}`);
-  // TODO: читать статус из базы/очереди
+  // TODO: читать реальный статус из БД/очереди
   return { status: 'COMPLETED' };
 }
