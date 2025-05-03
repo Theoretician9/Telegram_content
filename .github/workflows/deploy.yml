@@ -23,7 +23,7 @@ jobs:
 
       - name: Deploy via SSH
         run: |
-          ssh admin@telegramcont << 'EOF'
+          ssh admin@92.113.144.178 << 'EOF'
             cd ~/Telegram_content
             git pull origin main
             npm install
