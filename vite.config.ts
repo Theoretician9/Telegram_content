@@ -14,4 +14,21 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  resolve: {
+    alias: {
+      // чтобы Vite корректно находил JSX-runtime в React 18
+      'react/jsx-runtime': resolve(
+        __dirname,
+        'node_modules',
+        'react',
+        'jsx-runtime.js'
+      ),
+      'react/jsx-dev-runtime': resolve(
+        __dirname,
+        'node_modules',
+        'react',
+        'jsx-dev-runtime.js'
+      ),
+    },
+  },
 })
