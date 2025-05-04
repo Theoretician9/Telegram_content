@@ -3,30 +3,29 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
-  // исходная папка с index.html и исходниками React
+  // Папка, где лежит index.html и исходники клиента
   root: path.resolve(__dirname, 'src'),
+
   plugins: [
-    // переключаемся на «classic» JSX-runtime,
-    // чтобы не дергать react/jsx-runtime вручную
+    // Классический JSX-runtime, чтобы не дергать react/jsx-runtime вручную
     react({
       jsxRuntime: 'classic'
     })
   ],
+
   resolve: {
     alias: {
-      // чтобы в коде можно было писать import Foo from '~/components/Foo'
-      '~': path.resolve(__dirname, 'src'),
-      // и чтобы React разрешался однозначно из node_modules
-      react: path.resolve(__dirname, 'node_modules/react'),
-      'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
+      // import Foo from '~/components/Foo' будет резолвиться в src/components/Foo
+      '~': path.resolve(__dirname, 'src')
     }
   },
+
   build: {
-    // куда складываем собранный клиент
+    // Сборка уедет в dist/client
     outDir: path.resolve(__dirname, 'dist/client'),
     emptyOutDir: true,
     rollupOptions: {
-      // точка входа сборки
+      // Точка входа — ваш индексник
       input: path.resolve(__dirname, 'src/index.html')
     }
   }
