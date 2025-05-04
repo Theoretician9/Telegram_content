@@ -9,30 +9,16 @@ export default defineConfig({
     outDir: resolve(__dirname, 'dist/client'),
     emptyOutDir: true,
     rollupOptions: {
-      input: resolve(__dirname, 'src/index.html'),
+      input: resolve(__dirname, 'src', 'index.html'),
     },
   },
   resolve: {
-    alias: [
-      { find: /^react$/, replacement: resolve(__dirname, 'node_modules/react') },
-      { find: /^react-dom$/, replacement: resolve(__dirname, 'node_modules/react-dom') },
-      {
-        find: /^react-dom\/client$/,
-        replacement: resolve(__dirname, 'node_modules/react-dom/client.js'),
-      },
-      {
-        find: /^react\/jsx-runtime$/,
-        replacement: resolve(__dirname, 'node_modules/react/jsx-runtime.js'),
-      },
-      {
-        find: /^react\/jsx-dev-runtime$/,
-        replacement: resolve(__dirname, 'node_modules/react/jsx-dev-runtime.js'),
-      },
-      {
-        find: /^~\/client(.*)$/,
-        replacement: resolve(__dirname, 'src/client') + '$1',
-      },
-    ],
+    alias: {
+      // чтобы ~/components/... и т.п. работали
+      '~': resolve(__dirname),
+      'react': resolve(__dirname, 'node_modules', 'react'),
+      'react-dom': resolve(__dirname, 'node_modules', 'react-dom'),
+    },
   },
   optimizeDeps: {
     include: [
@@ -40,7 +26,9 @@ export default defineConfig({
       'react-dom',
       'react/jsx-runtime',
       'react/jsx-dev-runtime',
-      'react-dom/client',
+      '@tanstack/react-query',
+      'react-router-dom',
+      'lucide-react',
     ],
   },
 })
