@@ -13,32 +13,18 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: [
-      // сам React и ReactDOM
-      { find: 'react', replacement: resolve(__dirname, 'node_modules', 'react') },
-      {
-        find: 'react-dom',
-        replacement: resolve(__dirname, 'node_modules', 'react-dom'),
-      },
-      // явный алиас для JSX-runtime (без ^ и $ не сработает на ✕без.Extension)
-      {
-        find: /^react\/jsx-runtime$/,
-        replacement: resolve(
-          __dirname,
-          'node_modules',
-          'react',
-          'jsx-runtime.js'
-        ),
-      },
-      {
-        find: /^react\/jsx-dev-runtime$/,
-        replacement: resolve(
-          __dirname,
-          'node_modules',
-          'react',
-          'jsx-dev-runtime.js'
-        ),
-      },
-    ],
+    alias: {
+      // Перехватываем основной импорт React
+      'react': resolve(__dirname, 'node_modules/react'),
+      'react-dom': resolve(__dirname, 'node_modules/react-dom'),
+      // Подменяем jsx-runtime на реальный файл
+      'react/jsx-runtime': resolve(__dirname, 'node_modules/react/jsx-runtime.js'),
+      'react/jsx-dev-runtime': resolve(
+        __dirname,
+        'node_modules/react/jsx-dev-runtime.js'
+      ),
+    },
+    // Явно добавляем расширения, которые Vite будет пробовать
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
 })
