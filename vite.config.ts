@@ -1,32 +1,29 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import path from 'path'
+import { resolve } from 'path'
 
 export default defineConfig({
-  // Папка, где лежит index.html и исходники клиента
-  root: path.resolve(__dirname, 'src'),
-
-  plugins: [
-    // Классический JSX-runtime, чтобы не дергать react/jsx-runtime вручную
-    react({
-      jsxRuntime: 'classic'
-    })
-  ],
-
+  // Указываем, что точка входа — директория с клиентскими файлами
+  root: resolve(__dirname, 'src'),
+  plugins: [react()],
   resolve: {
     alias: {
-      // import Foo from '~/components/Foo' будет резолвиться в src/components/Foo
-      '~': path.resolve(__dirname, 'src')
-    }
+      // Позволяет импортировать модули через "~/..." начиная из src
+      '~': resolve(__dirname, 'src'),
+      // Явные алиасы для React
+      react: resolve(__dirname, 'node_modules', 'react'),
+      'react-dom': resolve(__dirname, 'node_modules', 'react-dom')
+    },
   },
-
   build: {
-    // Сборка уедет в dist/client
-    outDir: path.resolve(__dirname, 'dist/client'),
+    // Выходная папка для собранного фронтенда
+    outDir: resolve(__dirname, 'dist/client'),
     emptyOutDir: true,
     rollupOptions: {
-      // Точка входа — ваш индексник
-      input: path.resolve(__dirname, 'src/index.html')
+      input: resolve(__dirname, 'src', 'index.html')
     }
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime']
   }
 })
