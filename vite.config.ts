@@ -3,11 +3,9 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
 export default defineConfig({
-  // Проект у нас в папке src, там лежит index.html
   root: resolve(__dirname, 'src'),
   plugins: [react()],
   build: {
-    // Сборка в dist/client
     outDir: resolve(__dirname, 'dist/client'),
     emptyOutDir: true,
     rollupOptions: {
@@ -17,15 +15,22 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: {
-      // чтобы Vite находил React и JSX-runtime
-      react: resolve(__dirname, 'node_modules', 'react'),
-      'react-dom': resolve(__dirname, 'node_modules', 'react-dom'),
-      'react/jsx-runtime': resolve(__dirname, 'node_modules', 'react', 'jsx-runtime.js'),
-      'react/jsx-dev-runtime': resolve(__dirname, 'node_modules', 'react', 'jsx-dev-runtime.js'),
-      // алиас для клиентской папки
-      '~client': resolve(__dirname, 'src', 'client'),
-    },
+    alias: [
+      { find: 'react', replacement: resolve(__dirname, 'node_modules', 'react') },
+      { find: 'react-dom', replacement: resolve(__dirname, 'node_modules', 'react-dom') },
+      { 
+        find: /^react\/jsx-runtime$/, 
+        replacement: resolve(__dirname, 'node_modules', 'react', 'jsx-runtime.js') 
+      },
+      { 
+        find: /^react\/jsx-dev-runtime$/, 
+        replacement: resolve(__dirname, 'node_modules', 'react', 'jsx-dev-runtime.js') 
+      },
+      { 
+        find: /^~client\/(.*)$/, 
+        replacement: resolve(__dirname, 'src', '$1') 
+      },
+    ],
   },
   optimizeDeps: {
     include: [
@@ -35,7 +40,7 @@ export default defineConfig({
       'react/jsx-dev-runtime',
       'react-router-dom',
       '@tanstack/react-query',
-      'lucide-react'
+      'lucide-react',
     ],
   },
 })
