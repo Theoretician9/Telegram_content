@@ -1,49 +1,33 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import path from 'path'
 
 export default defineConfig({
-  // указываем папку с index.html
-  root: resolve(__dirname, 'src'),
-  plugins: [react()],
+  // исходная папка с index.html и исходниками React
+  root: path.resolve(__dirname, 'src'),
+  plugins: [
+    // переключаемся на «classic» JSX-runtime,
+    // чтобы не дергать react/jsx-runtime вручную
+    react({
+      jsxRuntime: 'classic'
+    })
+  ],
   resolve: {
-    alias: [
-      // чтобы Vite находил React и React-DOM
-      { find: 'react', replacement: resolve(__dirname, 'node_modules', 'react') },
-      { find: 'react-dom', replacement: resolve(__dirname, 'node_modules', 'react-dom') },
-      // для JSX runtime в React 18
-      {
-        find: 'react/jsx-runtime',
-        replacement: resolve(__dirname, 'node_modules', 'react', 'jsx-runtime.js'),
-      },
-      {
-        find: 'react/jsx-dev-runtime',
-        replacement: resolve(__dirname, 'node_modules', 'react', 'jsx-dev-runtime.js'),
-      },
-      // если в коде используете '~/...' — пробрасываем в корень проекта
-      { find: '~/client', replacement: resolve(__dirname, 'src', 'client') },
-      { find: '~/components', replacement: resolve(__dirname, 'src', 'components') },
-      // добавьте сюда другие абсолютные алиасы по необходимости
-    ],
-  },
-  optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      'react/jsx-runtime',
-      'react/jsx-dev-runtime',
-      'react-router-dom',
-      '@tanstack/react-query',
-      'lucide-react',
-    ],
+    alias: {
+      // чтобы в коде можно было писать import Foo from '~/components/Foo'
+      '~': path.resolve(__dirname, 'src'),
+      // и чтобы React разрешался однозначно из node_modules
+      react: path.resolve(__dirname, 'node_modules/react'),
+      'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
+    }
   },
   build: {
-    // куда класть собранные файлы
-    outDir: resolve(__dirname, 'dist/client'),
+    // куда складываем собранный клиент
+    outDir: path.resolve(__dirname, 'dist/client'),
     emptyOutDir: true,
     rollupOptions: {
-      // точка входа
-      input: resolve(__dirname, 'src', 'index.html'),
-    },
-  },
+      // точка входа сборки
+      input: path.resolve(__dirname, 'src/index.html')
+    }
+  }
 })
