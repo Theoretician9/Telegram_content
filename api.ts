@@ -1301,7 +1301,45 @@ export async function getGeneratedContent(input: { taskId: string }) {
   try {
     const { userId } = await getAuth({ required: true });
     console.log(`Checking task status for taskId: ${input.taskId}`);
+// ========== Server bootstrap ==========
+const app = express();
+app.use(express.json());
 
+// health‐check
+app.get('/api/health', (_req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
+// ваша реализация RPC‐маршрутов
+// (пример)
+app.post('/api/getChannel', async (req, res) => {
+  try {
+    const result = await getChannel(req.body);
+    res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+// … добавьте здесь остальные app.post для listChannels, addChannel, deleteChannel, updateChannelTheme и т.д.
+
+// отдаём статические файлы клиентской сборки
+app.use(
+  express.static(path.join(__dirname, 'dist', 'client'))
+);
+
+// SPA‐fallback: для всех прочих маршрутов возвращаем index.html
+app.get('*', (_req, res) => {
+  res.sendFile(
+    path.join(__dirname, 'dist', 'client', 'index.html')
+  );
+});
+
+const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+app.listen(port, () => {
+  console.log(`Server listening on http://localhost:${port}`);
+});
+// =======================================
+    
     // First check the task status
     const taskStatus = await getTaskStatus(input.taskId);
     console.log(`Task status for ${input.taskId}: ${taskStatus.status}`);
@@ -1352,10 +1390,6 @@ export async function getGeneratedContent(input: { taskId: string }) {
     }
   }
 }
-// В конец api.ts, после последней функции:
-import express from 'express';
-
-const app = express();
 // health check
 app.get('/api/health', (_req, res) => {
   res.status(200).json({ status: 'ok' })
@@ -1400,7 +1434,3 @@ app.use(express.static(path.join(__dirname, 'dist', 'client')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'client', 'index.html'));
 });
-
-// Запуск сервера остаётся без изменений:
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Server listening on port ${port}`));
