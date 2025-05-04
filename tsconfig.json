@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "jsx": "react-jsx",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
+    "target": "ES2020",                     // какой стандарт JS генерировать
+    "module": "ESNext",                     // ES-модули
+    "moduleResolution": "Node",             // как искать модули
+    "jsx": "react-jsx",                     // JSX-трансформация для React 17+
+    "esModuleInterop": true,                // interop CommonJS ↔ ESM
+    "resolveJsonModule": true,              // импорт JSON
+    "baseUrl": ".",                         // базовая папка для путей
+    "paths": {                              // алиасы
       "~/*": ["src/*"]
     },
-    "outDir": "dist",
-    "rootDir": ".",
-    "strict": true,
-    "skipLibCheck": true
+    "outDir": "dist",                       // куда складывать результат сборки TS
+    "rootDir": ".",                         // корень вашего проекта
+    "strict": true,                         // все строгие проверки
+    "skipLibCheck": true                    // не проверять типы в node_modules
   },
   "include": [
     "api.ts",
