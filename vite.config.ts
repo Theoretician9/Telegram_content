@@ -14,9 +14,22 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // Чтобы корректно разрешался React при классическом JSX
+      // основное:
       react: resolve(__dirname, 'node_modules', 'react'),
       'react-dom': resolve(__dirname, 'node_modules', 'react-dom'),
+      // JSX-рантаймы:
+      'react/jsx-runtime': resolve(
+        __dirname,
+        'node_modules',
+        'react',
+        'jsx-runtime.js'
+      ),
+      'react/jsx-dev-runtime': resolve(
+        __dirname,
+        'node_modules',
+        'react',
+        'jsx-dev-runtime.js'
+      ),
     },
   },
 })
