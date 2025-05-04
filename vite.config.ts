@@ -3,26 +3,25 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
 export default defineConfig({
-  // точка входа — корень репозитория
-  root: '.',
+  // теперь корневой каталог — src
+  root: resolve(__dirname, 'src'),
   plugins: [react()],
   build: {
-    // куда складывать собранный клиент
+    // итоговая сборка пойдёт в dist/client
     outDir: resolve(__dirname, 'dist/client'),
     emptyOutDir: true,
     rollupOptions: {
-      // входная html
+      // входной HTML остаётся src/index.html
       input: resolve(__dirname, 'src/index.html'),
     },
   },
   resolve: {
     alias: [
-      // чтобы ~/client/* резолвилось в src/client/*
+      // ~/client → src/client
       { find: '~/client', replacement: resolve(__dirname, 'src/client') },
     ],
   },
   optimizeDeps: {
-    // подтянем react в зависимостях на этапе dev
     include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
   },
 })
