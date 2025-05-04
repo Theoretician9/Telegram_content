@@ -13,32 +13,10 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: [
-      // поддержка импорта по ~/…
-      { find: /^~\//, replacement: `${resolve(__dirname)}/` },
-      // основные пакеты
-      { find: 'react', replacement: resolve(__dirname, 'node_modules', 'react') },
-      { find: 'react-dom', replacement: resolve(__dirname, 'node_modules', 'react-dom') },
-      // явное указание JSX runtime-файлов
-      {
-        find: 'react/jsx-runtime',
-        replacement: resolve(__dirname, 'node_modules', 'react', 'jsx-runtime.js'),
-      },
-      {
-        find: 'react/jsx-dev-runtime',
-        replacement: resolve(__dirname, 'node_modules', 'react', 'jsx-dev-runtime.js'),
-      },
-    ],
-  },
-  optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      'react/jsx-runtime',
-      'react/jsx-dev-runtime',
-      'react-router-dom',
-      '@tanstack/react-query',
-      'lucide-react',
-    ],
+    alias: {
+      // Чтобы корректно разрешался React при классическом JSX
+      react: resolve(__dirname, 'node_modules', 'react'),
+      'react-dom': resolve(__dirname, 'node_modules', 'react-dom'),
+    },
   },
 })
