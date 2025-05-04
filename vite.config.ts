@@ -1,27 +1,26 @@
-// vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import path from 'path'
 
 export default defineConfig({
-  root: resolve(__dirname, 'src'),
+  // плагин React
   plugins: [react()],
-  build: {
-    outDir: resolve(__dirname, 'dist/client'),
-    emptyOutDir: true,
-    rollupOptions: {
-      input: resolve(__dirname, 'src/index.html'),
+  // алиасы для удобного импорта
+  resolve: {
+    alias: {
+      // чтобы ~/client/api резолвилось в src/client/api.ts и т.п.
+      '~': path.resolve(__dirname, 'src'),
+      // явно указываем на React
+      react: path.resolve(__dirname, 'node_modules/react'),
+      'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
     },
   },
-  resolve: {
-    alias: [
-      // чтобы в коде можно было писать import Foo from '~/components/Foo'
-      { find: '~', replacement: resolve(__dirname, 'src') },
-    ],
-  },
-  // для dev-серверa
-  server: {
-    port: 5173,
-    host: true, // чтобы по внешнему IP тоже было доступно
+  // сборка клиентской части
+  build: {
+    outDir: path.resolve(__dirname, 'dist/client'),
+    emptyOutDir: true,
+    rollupOptions: {
+      input: path.resolve(__dirname, 'src/index.html'),
+    },
   },
 })
