@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
 export default defineConfig({
-  root: resolve(__dirname, 'src'),          // исходники в src/
+  root: resolve(__dirname, 'src'),
   plugins: [react()],
   build: {
     outDir: resolve(__dirname, 'dist/client'),
@@ -14,11 +14,7 @@ export default defineConfig({
   },
   resolve: {
     alias: [
-      // Основной React
-      { find: 'react', replacement: resolve(__dirname, 'node_modules/react/index.js') },
-      { find: 'react-dom', replacement: resolve(__dirname, 'node_modules/react-dom/index.js') },
-
-      // JSX runtime (React 18+)
+      // Для React 18+ JSX runtime
       {
         find: 'react/jsx-runtime',
         replacement: resolve(__dirname, 'node_modules/react/jsx-runtime.js'),
@@ -27,8 +23,7 @@ export default defineConfig({
         find: 'react/jsx-dev-runtime',
         replacement: resolve(__dirname, 'node_modules/react/jsx-dev-runtime.js'),
       },
-
-      // Алиас для импорта из client/
+      // Алиас для ~/client/*
       {
         find: '~/client',
         replacement: resolve(__dirname, 'src/client'),
