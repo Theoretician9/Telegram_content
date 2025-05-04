@@ -1302,7 +1302,7 @@ export async function getGeneratedContent(input: { taskId: string }) {
     const { userId } = await getAuth({ required: true });
     console.log(`Checking task status for taskId: ${input.taskId}`);
 // ========== Server bootstrap ==========
-const app = express();
+const app = ();
 app.use(express.json());
 
 // health‐check
