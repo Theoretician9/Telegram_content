@@ -15,20 +15,14 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: [
-      { find: 'react', replacement: resolve(__dirname, 'node_modules', 'react') },
-      { find: 'react-dom', replacement: resolve(__dirname, 'node_modules', 'react-dom') },
-
-      // пробрасываем jsx-runtime
-      {
-        find: /^react\/jsx-runtime$/,
-        replacement: resolve(__dirname, 'node_modules', 'react', 'jsx-runtime.js'),
-      },
-      {
-        find: /^react\/jsx-dev-runtime$/,
-        replacement: resolve(__dirname, 'node_modules', 'react', 'jsx-dev-runtime.js'),
-      },
-
+  alias: {
+    react: resolve(__dirname, 'node_modules', 'react'),
+    'react-dom': resolve(__dirname, 'node_modules', 'react-dom'),
+    'react/jsx-runtime': resolve(__dirname, 'node_modules', 'react', 'jsx-runtime.js'),
+    'react/jsx-dev-runtime': resolve(__dirname, 'node_modules', 'react', 'jsx-dev-runtime.js'),
+    '~/client': resolve(__dirname, 'src', 'client'),
+  },
+},
       // ваш ~/client/api
       {
         find: /^~\/client\/(.*)$/,
