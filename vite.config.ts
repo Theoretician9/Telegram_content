@@ -1,4 +1,3 @@
-// vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
@@ -8,7 +7,6 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      // вот он, нужный алиас
       '~': resolve(__dirname, 'src'),
     },
   },
@@ -19,4 +17,12 @@ export default defineConfig({
       input: resolve(__dirname, 'src', 'index.html'),
     },
   },
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react/jsx-runtime',
+      'react/jsx-dev-runtime'
+    ]
+  }
 })
