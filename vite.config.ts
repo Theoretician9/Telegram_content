@@ -3,26 +3,29 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
 export default defineConfig({
+  // Папка с клиентским кодом и index.html
   root: resolve(__dirname, 'src'),
-  plugins: [react()],
+
+  plugins: [
+    react(), // поддержка JSX
+  ],
+
   resolve: {
     alias: {
-      // Основные алиасы
+      // чтобы можно было импортировать из ~/...
+      '~': resolve(__dirname, 'src'),
       '@': resolve(__dirname, 'src'),
-      react: resolve(__dirname, 'node_modules', 'react'),
-      'react-dom': resolve(__dirname, 'node_modules', 'react-dom'),
+
+      // явные пути к React, чтобы Vite не ругался
+      react: resolve(__dirname, 'node_modules/react'),
+      'react-dom': resolve(__dirname, 'node_modules/react-dom'),
+      'react/jsx-runtime': resolve(__dirname, 'node_modules/react/jsx-runtime.js'),
+      'react/jsx-dev-runtime': resolve(__dirname, 'node_modules/react/jsx-dev-runtime.js'),
     },
   },
-  build: {
-    outDir: resolve(__dirname, 'dist/client'),
-    emptyOutDir: true,
-    rollupOptions: {
-      input: resolve(__dirname, 'src', 'index.html'),
-      // Если нужно выставить внешние зависимости, добавь сюда:
-      // external: ['react', 'react-dom', 'react-router-dom', '@tanstack/react-query', 'lucide-react']
-    },
-  },
+
   optimizeDeps: {
+    // заранее включаем основные пакеты для ускорения старта
     include: [
       'react',
       'react-dom',
@@ -32,5 +35,15 @@ export default defineConfig({
       '@tanstack/react-query',
       'lucide-react',
     ],
+  },
+
+  build: {
+    // выводим собранный клиент в dist/client
+    outDir: resolve(__dirname, 'dist/client'),
+    emptyOutDir: true,
+    rollupOptions: {
+      // точка входа
+      input: resolve(__dirname, 'src', 'index.html'),
+    },
   },
 })
