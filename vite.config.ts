@@ -13,26 +13,22 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: {
-      // корень проекта для '~/…'
-      '~': resolve(__dirname),
-      // обычные реакт-пакеты
-      'react': resolve(__dirname, 'node_modules', 'react'),
-      'react-dom': resolve(__dirname, 'node_modules', 'react-dom'),
-      // явное указание на файлы JSX-runtime
-      'react/jsx-runtime': resolve(
-        __dirname,
-        'node_modules',
-        'react',
-        'jsx-runtime.js'
-      ),
-      'react/jsx-dev-runtime': resolve(
-        __dirname,
-        'node_modules',
-        'react',
-        'jsx-dev-runtime.js'
-      ),
-    },
+    alias: [
+      // поддержка импорта по ~/…
+      { find: /^~\//, replacement: `${resolve(__dirname)}/` },
+      // основные пакеты
+      { find: 'react', replacement: resolve(__dirname, 'node_modules', 'react') },
+      { find: 'react-dom', replacement: resolve(__dirname, 'node_modules', 'react-dom') },
+      // явное указание JSX runtime-файлов
+      {
+        find: 'react/jsx-runtime',
+        replacement: resolve(__dirname, 'node_modules', 'react', 'jsx-runtime.js'),
+      },
+      {
+        find: 'react/jsx-dev-runtime',
+        replacement: resolve(__dirname, 'node_modules', 'react', 'jsx-dev-runtime.js'),
+      },
+    ],
   },
   optimizeDeps: {
     include: [
@@ -40,8 +36,8 @@ export default defineConfig({
       'react-dom',
       'react/jsx-runtime',
       'react/jsx-dev-runtime',
-      '@tanstack/react-query',
       'react-router-dom',
+      '@tanstack/react-query',
       'lucide-react',
     ],
   },
