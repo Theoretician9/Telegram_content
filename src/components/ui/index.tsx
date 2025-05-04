@@ -1,46 +1,47 @@
 // src/components/ui/index.tsx
-import React from 'react'
+import React from 'react';
 
-type Props = React.HTMLAttributes<HTMLElement>
+export const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = (props) => (
+  <button {...props} />
+);
 
-// Кнопка
-export const Button: React.FC<Props> = props => <button {...props} />
+export const Card: React.FC = ({ children, ...props }) => <div {...props}>{children}</div>;
+export const CardHeader = Card;
+export const CardTitle = Card;
+export const CardDescription = Card;
+export const CardContent = Card;
+export const CardFooter = Card;
 
-// Карточка
-export const Card: React.FC<Props> = props => <div {...props} />
-export const CardHeader: React.FC<Props> = props => <div {...props} />
-export const CardTitle: React.FC<Props> = props => <h3 {...props} />
-export const CardDescription: React.FC<Props> = props => <p {...props} />
-export const CardContent: React.FC<Props> = props => <div {...props} />
-export const CardFooter: React.FC<Props> = props => <div {...props} />
+export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => (
+  <input {...props} />
+);
+export const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = (props) => (
+  <label {...props} />
+);
+export const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = (props) => (
+  <textarea {...props} />
+);
 
-// Формы
-export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = props => <input {...props} />
-export const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = props => <label {...props} />
-export const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = props => <textarea {...props} />
+// Диалоги и вкладки можно заглушить так же:
+export const Dialog: any = ({ children }: any) => <>{children}</>;
+export const DialogTrigger = Dialog;
+export const DialogContent = Dialog;
+export const DialogHeader = Dialog;
+export const DialogTitle = Dialog;
+export const DialogDescription = Dialog;
+export const DialogFooter = Dialog;
 
-// Диалог
-export const Dialog: React.FC<{ open?: boolean; onOpenChange?: (open: boolean) => void }> = ({ children }) => <>{children}</>
-export const DialogTrigger = (props: Props) => <button {...props} />
-export const DialogContent: React.FC<Props> = props => <div {...props} />
-export const DialogHeader: React.FC<Props> = props => <header {...props} />
-export const DialogTitle: React.FC<Props> = props => <h2 {...props} />
-export const DialogDescription: React.FC<Props> = props => <p {...props} />
-export const DialogFooter: React.FC<Props> = props => <footer {...props} />
+export const Tabs: any = ({ children }: any) => <>{children}</>;
+export const TabsList = Tabs;
+export const TabsTrigger = Tabs;
+export const TabsContent = Tabs;
 
-// Вкладки
-export const Tabs: React.FC<Props> = props => <div {...props} />
-export const TabsList: React.FC<Props> = props => <div {...props} />
-export const TabsTrigger: React.FC<Props> = props => <button {...props} />
-export const TabsContent: React.FC<Props> = props => <div {...props} />
+// селекты, бейджи, скелетоны и т.п.
+export const Select: any = ({ children }: any) => <>{children}</>;
+export const SelectTrigger = Select;
+export const SelectValue = Select;
+export const SelectContent = Select;
+export const SelectItem = Select;
 
-// Select
-export const Select: React.FC<{ value?: string; onValueChange?: (val: string) => void }> = props => <select {...(props as any)} />
-export const SelectTrigger: React.FC<Props> = props => <span {...props} />
-export const SelectValue: React.FC<Props> = props => <span {...props} />
-export const SelectContent: React.FC<Props> = props => <div {...props} />
-export const SelectItem: React.FC<{ value: string }> = props => <div {...props} />
-
-// Остальное
-export const Badge: React.FC<Props> = props => <span {...props} />
-export const Skeleton: React.FC<Props> = props => <div {...props} />
+export const Badge: React.FC = (props) => <span {...props} />;
+export const Skeleton: React.FC = () => <span className="animate-pulse">Loading...</span>;
