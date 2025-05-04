@@ -1393,3 +1393,14 @@ const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 app.listen(port, () => {
   console.log(`🚀 Server is listening on http://localhost:${port}`);
 });
+// 1) Отдаём статику из dist/client:
+app.use(express.static(path.join(__dirname, 'dist', 'client')));
+
+// 2) Для SPA: на любой маршрут, не совпадающий с /api/*, возвращаем index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'client', 'index.html'));
+});
+
+// Запуск сервера остаётся без изменений:
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server listening on port ${port}`));
