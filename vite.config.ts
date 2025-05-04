@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
 export default defineConfig({
-  // корень для dev-server и сборки — папка src
   root: resolve(__dirname, 'src'),
   plugins: [react()],
   build: {
@@ -15,26 +14,31 @@ export default defineConfig({
   },
   resolve: {
     alias: [
-      // основной React
-      { find: 'react', replacement: resolve(__dirname, 'node_modules/react') },
-      { find: 'react-dom', replacement: resolve(__dirname, 'node_modules/react-dom') },
-      // нужные нам JSX-runtime
+      // Основной React-бандл
+      { find: /^react$/, replacement: resolve(__dirname, 'node_modules/react') },
+      { find: /^react-dom$/, replacement: resolve(__dirname, 'node_modules/react-dom') },
+      // JSX runtimes
       {
-        find: 'react/jsx-runtime',
+        find: /^react\/jsx-runtime$/,
         replacement: resolve(__dirname, 'node_modules/react/jsx-runtime.js'),
       },
       {
-        find: 'react/jsx-dev-runtime',
+        find: /^react\/jsx-dev-runtime$/,
         replacement: resolve(__dirname, 'node_modules/react/jsx-dev-runtime.js'),
       },
-      // алиас для `~/client/...`
+      // Алиас "~/client" на папку src/client
       {
-        find: '~/client',
-        replacement: resolve(__dirname, 'src/client'),
+        find: /^~\/client(.*)$/,
+        replacement: resolve(__dirname, 'src/client') + '$1',
       },
     ],
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
+    include: [
+      'react',
+      'react-dom',
+      'react/jsx-runtime',
+      'react/jsx-dev-runtime',
+    ],
   },
 })
