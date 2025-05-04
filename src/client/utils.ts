@@ -1,37 +1,24 @@
 // src/client/utils.ts
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
-/** Пример: форматирует дату */
 export function formatDate(dateString: string) {
   const d = new Date(dateString);
-  return d.toLocaleDateString("ru-RU", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  return d.toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-/** Хук для получения текущего пользователя */
-export function useAuth() {
-  const [user, setUser] = useState<{ id: string; name: string } | null>(null);
+export function useAuth(opts: { required: boolean }) {
+  const [status, setStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading');
   useEffect(() => {
-    fetch("/api/me")
-      .then((r) => {
-        if (!r.ok) throw new Error("Не авторизован");
-        return r.json();
-      })
-      .then((data) => setUser(data.user))
-      .catch(() => setUser(null));
+    // здесь будет реальный запрос, пока просто переключаем сразу в authenticated
+    setStatus('authenticated');
   }, []);
-  return user;
+  return { status };
 }
 
-/** Хук для показа тостов */
-type ToastFn = (message: string, type?: "success" | "error") => void;
-export function useToast(): ToastFn {
-  return (message, type = "success") => {
-    // Простая заглушка: на реальном проекте замените на вашу систему тостов
-    const prefix = type === "error" ? "❌ " : "✅ ";
-    window.alert(prefix + message);
+export function useToast() {
+  return {
+    toast: (opts: { title: string; description?: string; variant?: string }) => {
+      console.log('TOAST:', opts.title, opts.description || '');
+    },
   };
 }
