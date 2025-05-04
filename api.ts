@@ -1338,3 +1338,36 @@ export async function getGeneratedContent(input: { taskId: string }) {
     throw new Error("Произошла непредвиденная ошибка при получении контента. Пожалуйста, попробуйте позже.");
   }
 }
+// ==== Server bootstrap ====
+const app = express();
+app.use(express.json());
+
+// 1) Проверка работоспособности
+app.get('/api/health', (_req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
+// 2) Ваши RPC-эндпоинты
+// (пример, продублируйте для всех своих методов)
+app.post('/api/getChannel', async (req, res) => {
+  try {
+    const result = await getChannel(req.body);
+    res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+// … аналогично listChannels, addChannel и т.д. …
+
+// 3) Раздача клиентской сборки
+app.use(express.static(path.join(__dirname, 'client')));
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'index.html'));
+});
+
+// 4) Запуск
+const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server listening on http://0.0.0.0:${port}`);
+});
+// ==========================
