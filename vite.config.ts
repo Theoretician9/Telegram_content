@@ -14,10 +14,24 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // чтобы ~/components/... и т.п. работали
+      // корень проекта для '~/…'
       '~': resolve(__dirname),
+      // обычные реакт-пакеты
       'react': resolve(__dirname, 'node_modules', 'react'),
       'react-dom': resolve(__dirname, 'node_modules', 'react-dom'),
+      // явное указание на файлы JSX-runtime
+      'react/jsx-runtime': resolve(
+        __dirname,
+        'node_modules',
+        'react',
+        'jsx-runtime.js'
+      ),
+      'react/jsx-dev-runtime': resolve(
+        __dirname,
+        'node_modules',
+        'react',
+        'jsx-dev-runtime.js'
+      ),
     },
   },
   optimizeDeps: {
