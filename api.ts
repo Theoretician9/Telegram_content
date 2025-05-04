@@ -1301,42 +1301,7 @@ export async function getGeneratedContent(input: { taskId: string }) {
   try {
     const { userId } = await getAuth({ required: true });
     console.log(`Checking task status for taskId: ${input.taskId}`);
-// ========== Server bootstrap ==========
-const app = ();
-app.use(express.json());
 
-// health‐check
-app.get('/api/health', (_req, res) => {
-  res.status(200).json({ status: 'ok' });
-});
-
-// ваша реализация RPC‐маршрутов
-// (пример)
-app.post('/api/getChannel', async (req, res) => {
-  try {
-    const result = await getChannel(req.body);
-    res.json(result);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
-  }
-});
-// … добавьте здесь остальные app.post для listChannels, addChannel, deleteChannel, updateChannelTheme и т.д.
-
-// отдаём статические файлы клиентской сборки
-app.use(
-  express.static(path.join(__dirname, 'dist', 'client'))
-);
-
-// SPA‐fallback: для всех прочих маршрутов возвращаем index.html
-app.get('*', (_req, res) => {
-  res.sendFile(
-    path.join(__dirname, 'dist', 'client', 'index.html')
-  );
-});
-
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
 });
 // =======================================
     
@@ -1398,9 +1363,18 @@ app.use(express.json());
 app.get('/', (_req, res) => {
   res.status(200).send('OK');
 });
-// Привяжем ваши экспортированные хэндлеры к HTTP­-эндпоинтам.
-// Здесь нужно подставить именно ваши имена функций и пути:
+// И так далее для всех ваших RPC‐функций:
+// addChannel, deleteChannel, updateChannelTheme, getChannelSettings, updateAnalysisSettings, analyzeCompetitiveChannels, getAnalysisStatus, publishImmediately и т.п.
+// ========== Server bootstrap ==========
+const app = express();
+app.use(express.json());
 
+// health-check endpoint
+app.get('/api/health', (_req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
+// RPC-endpoints: привязываем ваши функции к HTTP
 app.post('/api/getChannel', async (req, res) => {
   try {
     const result = await getChannel(req.body);
@@ -1409,8 +1383,7 @@ app.post('/api/getChannel', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-app.post('/api/listChannels', async (_req, res) => {
+app.post('/api/listChannels', async (req, res) => {
   try {
     const result = await listChannels();
     res.json(result);
@@ -1418,19 +1391,29 @@ app.post('/api/listChannels', async (_req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// И так далее для всех ваших RPC‐функций:
-// addChannel, deleteChannel, updateChannelTheme, getChannelSettings, updateAnalysisSettings, analyzeCompetitiveChannels, getAnalysisStatus, publishImmediately и т.п.
-
-// И наконец — запуск сервера:
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-app.listen(port, () => {
-  console.log(`🚀 Server is listening on http://localhost:${port}`);
+app.post('/api/addChannel', async (req, res) => {
+  try {
+    const result = await addChannel(req.body);
+    res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
 });
-// 1) Отдаём статику из dist/client:
+// … аналогично для deleteChannel, updateChannelTheme, getChannelSettings,
+// updateAnalysisSettings, analyzeCompetitiveChannels, getAnalysisStatus,
+// listContent, getContent, createContent, updateContent,
+// deleteContent, generateContent, getGeneratedContent, publishContentNow, startAutomaticContentGeneration, _publishScheduledContent …
+
+// отдаём статику клиентской сборки
 app.use(express.static(path.join(__dirname, 'dist', 'client')));
 
-// 2) Для SPA: на любой маршрут, не совпадающий с /api/*, возвращаем index.html
-app.get('*', (req, res) => {
+// SPA-fallback: все «не /api/*» маршруты → index.html
+app.get('*', (_req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'client', 'index.html'));
 });
+
+const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+app.listen(port, () => {
+  console.log(`Server listening on http://localhost:${port}`);
+});
+// =======================================
