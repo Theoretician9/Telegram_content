@@ -1296,43 +1296,31 @@ export async function generateContent(input: {
     }
   }
 }
-
+// Замена вашей текущей (сломавшейся) реализации:
 export async function getGeneratedContent(input: { taskId: string }) {
   try {
     const { userId } = await getAuth({ required: true });
     console.log(`Checking task status for taskId: ${input.taskId}`);
 
-});
-// =======================================
-    
-    // First check the task status
+    // 1) Проверяем статус задачи
     const taskStatus = await getTaskStatus(input.taskId);
     console.log(`Task status for ${input.taskId}: ${taskStatus.status}`);
 
     if (taskStatus.status === "RUNNING") {
       return { status: "PENDING" as const, content: null };
     }
-
     if (taskStatus.status === "FAILED") {
-      const errorMessage = taskStatus.error?.message || "Неизвестная ошибка";
+      const errorMessage = taskStatus.error?.message ?? "Неизвестная ошибка";
       console.error(`Task failed: ${errorMessage}`);
       throw new Error(`Генерация контента не удалась: ${errorMessage}`);
     }
 
-    // If the task is completed or in an unknown state, try to find the content
+    // 2) Задача завершена — ищем последний созданный контент
     console.log(`Looking for most recent content for user: ${userId}`);
     const content = await db.content.findFirst({
-      where: {
-        channel: {
-          userId,
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        channel: true,
-      },
+      where: { channel: { userId } },
+      orderBy: { createdAt: "desc" },
+      include: { channel: true },
     });
 
     if (!content) {
@@ -1345,75 +1333,8 @@ export async function getGeneratedContent(input: { taskId: string }) {
   } catch (error) {
     console.error("Error in getGeneratedContent:", error);
     if (error instanceof Error) {
-      throw new Error(
-        `Ошибка при получении сгенерированного контента: ${error.message}`,
-      );
-    } else {
-      throw new Error(
-        "Произошла непредвиденная ошибка при получении контента. Пожалуйста, попробуйте позже.",
-      );
+      throw new Error(`Ошибка при получении сгенерированного контента: ${error.message}`);
     }
+    throw new Error("Произошла непредвиденная ошибка при получении контента. Пожалуйста, попробуйте позже.");
   }
 }
-// health check
-app.get('/api/health', (_req, res) => {
-  res.status(200).json({ status: 'ok' })
-})
-app.use(express.json());
-app.get('/', (_req, res) => {
-  res.status(200).send('OK');
-});
-// И так далее для всех ваших RPC‐функций:
-// addChannel, deleteChannel, updateChannelTheme, getChannelSettings, updateAnalysisSettings, analyzeCompetitiveChannels, getAnalysisStatus, publishImmediately и т.п.
-// ========== Server bootstrap ==========
-const app = express();
-app.use(express.json());
-
-// health-check endpoint
-app.get('/api/health', (_req, res) => {
-  res.status(200).json({ status: 'ok' });
-});
-
-// RPC-endpoints: привязываем ваши функции к HTTP
-app.post('/api/getChannel', async (req, res) => {
-  try {
-    const result = await getChannel(req.body);
-    res.json(result);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
-  }
-});
-app.post('/api/listChannels', async (req, res) => {
-  try {
-    const result = await listChannels();
-    res.json(result);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
-  }
-});
-app.post('/api/addChannel', async (req, res) => {
-  try {
-    const result = await addChannel(req.body);
-    res.json(result);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
-  }
-});
-// … аналогично для deleteChannel, updateChannelTheme, getChannelSettings,
-// updateAnalysisSettings, analyzeCompetitiveChannels, getAnalysisStatus,
-// listContent, getContent, createContent, updateContent,
-// deleteContent, generateContent, getGeneratedContent, publishContentNow, startAutomaticContentGeneration, _publishScheduledContent …
-
-// отдаём статику клиентской сборки
-app.use(express.static(path.join(__dirname, 'dist', 'client')));
-
-// SPA-fallback: все «не /api/*» маршруты → index.html
-app.get('*', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'client', 'index.html'));
-});
-
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
-});
-// =======================================
