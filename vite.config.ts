@@ -3,27 +3,41 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
 export default defineConfig({
-  // Указываем, что точка входа — директория с клиентскими файлами
-  root: resolve(__dirname, 'src'),
+  root: resolve(__dirname, 'src'),       // корневая папка фронтенда
   plugins: [react()],
-  resolve: {
-    alias: {
-      // Позволяет импортировать модули через "~/..." начиная из src
-      '~': resolve(__dirname, 'src'),
-      // Явные алиасы для React
-      react: resolve(__dirname, 'node_modules', 'react'),
-      'react-dom': resolve(__dirname, 'node_modules', 'react-dom')
-    },
-  },
   build: {
-    // Выходная папка для собранного фронтенда
-    outDir: resolve(__dirname, 'dist/client'),
+    outDir: resolve(__dirname, 'dist/client'),  // куда складывать сборку
     emptyOutDir: true,
     rollupOptions: {
-      input: resolve(__dirname, 'src', 'index.html')
-    }
+      input: resolve(__dirname, 'src', 'index.html'),
+    },
+  },
+  resolve: {
+    alias: {
+      // путь к React 18 JSX runtime
+      'react/jsx-runtime': resolve(
+        __dirname,
+        'node_modules',
+        'react',
+        'jsx-runtime.js'
+      ),
+      'react/jsx-dev-runtime': resolve(
+        __dirname,
+        'node_modules',
+        'react',
+        'jsx-dev-runtime.js'
+      ),
+    },
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime']
+    include: [
+      'react',
+      'react-dom',
+      'react/jsx-runtime',
+      'react/jsx-dev-runtime',
+      'react-router-dom',
+      '@tanstack/react-query',
+      'lucide-react'
+    ]
   }
 })
