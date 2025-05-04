@@ -10,7 +10,6 @@
     "start": "node dist/api.js",
     "dev": "ts-node-dev --respawn --transpile-only --project tsconfig.json api.ts",
     "dev:client": "vite",
-    "build:client": "vite build",
     "preview:client": "vite preview"
   },
   "repository": {
