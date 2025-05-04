@@ -14,10 +14,12 @@ export default defineConfig({
   },
   resolve: {
     alias: [
-      // Основной React-бандл
       { find: /^react$/, replacement: resolve(__dirname, 'node_modules/react') },
       { find: /^react-dom$/, replacement: resolve(__dirname, 'node_modules/react-dom') },
-      // JSX runtimes
+      {
+        find: /^react-dom\/client$/,
+        replacement: resolve(__dirname, 'node_modules/react-dom/client.js'),
+      },
       {
         find: /^react\/jsx-runtime$/,
         replacement: resolve(__dirname, 'node_modules/react/jsx-runtime.js'),
@@ -26,7 +28,6 @@ export default defineConfig({
         find: /^react\/jsx-dev-runtime$/,
         replacement: resolve(__dirname, 'node_modules/react/jsx-dev-runtime.js'),
       },
-      // Алиас "~/client" на папку src/client
       {
         find: /^~\/client(.*)$/,
         replacement: resolve(__dirname, 'src/client') + '$1',
@@ -39,6 +40,7 @@ export default defineConfig({
       'react-dom',
       'react/jsx-runtime',
       'react/jsx-dev-runtime',
+      'react-dom/client',
     ],
   },
 })
