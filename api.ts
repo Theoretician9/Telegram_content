@@ -1379,7 +1379,11 @@ app.listen(port, '0.0.0.0', () => {
 });
 // ==========================
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+  console.error('❌ Unhandled Rejection at:', promise);
+  console.error('❌ Rejection reason:', JSON.stringify(reason, null, 2));
+  if (reason instanceof Error) {
+    console.error(reason.stack);
+  }
 });
 
 process.on('uncaughtException', (err) => {
