@@ -1387,7 +1387,8 @@ process.on('unhandledRejection', (reason: any, promise) => {
   } catch (e) {
     console.error('❌ Rejection reason (raw):', reason);
   }
-
+    console.error('❌ Rejection reason (stringified manually):', String(reason));
+  
   if (reason instanceof Error) {
     console.error('❌ Error name:', reason.name);
     console.error('❌ Error message:', reason.message);
