@@ -1,6 +1,6 @@
 import path from 'path';
 import express from 'express';
-import { db } from "./server/db";
+import { db } from "./server/db.ts";
 import {
   getAuth,
   requestMultimodalModel,
