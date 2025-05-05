@@ -1,3 +1,4 @@
+import util from 'util';
 import path from 'path';
 import express from 'express';
 import { db } from "./server/db.ts";
@@ -1378,8 +1379,6 @@ app.listen(port, '0.0.0.0', () => {
   console.log(`Server listening on http://0.0.0.0:${port}`);
 });
 // ==========================
-import util from 'util';
-
 process.on('unhandledRejection', (reason: any, promise) => {
   console.error('❌ Unhandled Rejection at:', promise);
 
