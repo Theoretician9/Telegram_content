@@ -1378,11 +1378,13 @@ app.listen(port, '0.0.0.0', () => {
   console.log(`Server listening on http://0.0.0.0:${port}`);
 });
 // ==========================
+import util from 'util';
+
 process.on('unhandledRejection', (reason: any, promise) => {
   console.error('❌ Unhandled Rejection at:', promise);
 
   try {
-    console.error('❌ Rejection reason (JSON):', JSON.stringify(reason, null, 2));
+    console.error('❌ Rejection reason (util.inspect):', util.inspect(reason, { depth: null, colors: false }));
   } catch (e) {
     console.error('❌ Rejection reason (raw):', reason);
   }
@@ -1392,7 +1394,6 @@ process.on('unhandledRejection', (reason: any, promise) => {
     console.error('❌ Error message:', reason.message);
     console.error('❌ Stack trace:', reason.stack);
   } else if (typeof reason === 'object') {
-    console.error('❌ Полный объект ошибки:', reason);
     console.error('❌ Keys in reason object:', Object.keys(reason));
     for (const key of Object.keys(reason)) {
       console.error(`❌ reason[${key}] =`, reason[key]);
