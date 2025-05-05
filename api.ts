@@ -1376,9 +1376,14 @@ const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 console.log('🪵 LOG BEFORE MAIN FUNCTION');
 (async () => {
   try {
-    console.log('🔄 Подключаем базу данных...');
-    await db.connect();
-    console.log('✅ База данных подключена');
+  console.log('🔄 Подключаем базу данных...');
+  await db.connect();
+  console.log('✅ База данных подключена');
+} catch (err) {
+  console.error('❌ Ошибка при подключении к БД:');
+  console.error(require('util').inspect(err, { depth: null, colors: true }));
+  process.exit(1); // Чтобы не запускать сервер дальше
+}
 
     console.log('🔄 Настраиваем middleware...');
     app.use(express.json());
