@@ -1388,9 +1388,17 @@ process.on('unhandledRejection', (reason: any, promise) => {
   }
 
   if (reason instanceof Error) {
+    console.error('❌ Error name:', reason.name);
+    console.error('❌ Error message:', reason.message);
     console.error('❌ Stack trace:', reason.stack);
   } else if (typeof reason === 'object') {
+    console.error('❌ Полный объект ошибки:', reason);
     console.error('❌ Keys in reason object:', Object.keys(reason));
+    for (const key of Object.keys(reason)) {
+      console.error(`❌ reason[${key}] =`, reason[key]);
+    }
+  } else {
+    console.error('❌ Неизвестный тип reason:', reason);
   }
 });
 
