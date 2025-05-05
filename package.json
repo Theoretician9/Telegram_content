@@ -9,7 +9,7 @@
     "build:client": "vite build",
     "build": "npm run build:server && npm run build:client",
     "start": "node dist/api.js",
-    "dev": "ts-node-dev --respawn --transpile-only --project tsconfig.json api.ts",
+    "dev": "NODE_OPTIONS='--loader ts-node/esm' ts-node --esm api.ts",
     "dev:client": "vite",
     "preview:client": "vite preview"
   },
