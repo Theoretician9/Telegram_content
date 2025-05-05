@@ -1,6 +1,3 @@
-import util from 'util';
-import path from 'path';
-import express from 'express';
 import { db } from "./server/db.ts";
 import {
   getAuth,
@@ -1347,48 +1344,76 @@ export async function getGeneratedContent(input: { taskId: string }) {
   }
 }
 // ==== Server bootstrap ====
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import util from 'util';
+import { db } from './server/db';
+import { getChannel } from './server/rpc/getChannel';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
-app.use(express.json());
-
-// 1) Проверка работоспособности
-app.get('/api/health', (_req, res) => {
-  res.status(200).json({ status: 'ok' });
-});
-
-// 2) Ваши RPC-эндпоинты
-// (пример, продублируйте для всех своих методов)
-app.post('/api/getChannel', async (req, res) => {
-  try {
-    const result = await getChannel(req.body);
-    res.json(result);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
-  }
-});
-// … аналогично listChannels, addChannel и т.д. …
-
-// 3) Раздача клиентской сборки
-app.use(express.static(path.join(__dirname, 'client')));
-app.get('*', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'index.html'));
-});
-
-// 4) Запуск
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Server listening on http://0.0.0.0:${port}`);
-});
-// ==========================
+
+(async () => {
+  try {
+    console.log('🔄 Подключаем базу данных...');
+    await db.connect();
+    console.log('✅ База данных подключена');
+
+    console.log('🔄 Настраиваем middleware...');
+    app.use(express.json());
+    console.log('✅ Middleware настроен');
+
+    console.log('🔄 Регистрируем маршруты...');
+
+    // 1) Проверка работоспособности
+    app.get('/api/health', (_req, res) => {
+      res.status(200).json({ status: 'ok' });
+    });
+
+    // 2) RPC-эндпоинты
+    app.post('/api/getChannel', async (req, res) => {
+      try {
+        const result = await getChannel(req.body);
+        res.json(result);
+      } catch (err: any) {
+        console.error('❌ Ошибка в getChannel:', err);
+        res.status(400).json({ error: err.message });
+      }
+    });
+
+    // 3) Раздача клиентской сборки
+    app.use(express.static(path.join(__dirname, 'client')));
+    app.get('*', (_req, res) => {
+      res.sendFile(path.join(__dirname, 'client', 'index.html'));
+    });
+
+    console.log('🔄 Запускаем сервер...');
+    app.listen(port, '0.0.0.0', () => {
+      console.log(`✅ Сервер слушает на http://0.0.0.0:${port}`);
+    });
+
+  } catch (err) {
+    console.error('❌ Ошибка при инициализации сервера:', util.inspect(err, { depth: null }));
+    process.exit(1);
+  }
+})();
+
+// ==== Глобальный отлов ошибок ====
 process.on('unhandledRejection', (reason: any, promise) => {
   console.error('❌ Unhandled Rejection at:', promise);
 
   try {
-    console.error('❌ Rejection reason (util.inspect):', util.inspect(reason, { depth: null, colors: false }));
+    console.error('❌ Rejection reason (util.inspect):', util.inspect(reason, { depth: null }));
   } catch (e) {
     console.error('❌ Rejection reason (raw):', reason);
   }
-    console.error('❌ Rejection reason (stringified manually):', String(reason));
-  
+
+  console.error('❌ Rejection reason (строка):', String(reason));
+
   if (reason instanceof Error) {
     console.error('❌ Error name:', reason.name);
     console.error('❌ Error message:', reason.message);
