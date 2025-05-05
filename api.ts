@@ -314,10 +314,17 @@ export async function getAnalysisStatus(input: { taskId: string }) {
     }
 
     // If the task is completed, find the latest channel analysis for this user
-    const channels = await db.channel.findMany({
-      where: { userId },
-      include: { channelAnalysis: true },
-    });
+    try {
+  const channels = await db.channel.findMany({
+    where: {
+      userId: user?.id || '',
+    },
+  });
+  res.json({ user, channels });
+} catch (err) {
+  console.error('❌ Ошибка при получении каналов:', err);
+  res.status(500).json({ error: 'Ошибка сервера' });
+}
 
     const channelWithAnalysis = channels.find(
       (c) => c.channelAnalysis !== null,
