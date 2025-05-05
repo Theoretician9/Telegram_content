@@ -1398,14 +1398,17 @@ console.log('🪵 LOG BEFORE MAIN FUNCTION');
 
     // 2) RPC-эндпоинты
     app.post('/api/getChannel', async (req, res) => {
-      try {
-        const result = await getChannel(req.body);
-        res.json(result);
-      } catch (err: any) {
-        console.error('❌ Ошибка в getChannel:', err);
-        res.status(400).json({ error: err.message });
-      }
-    });
+  try {
+    console.log('📥 getChannel request:', req.body);
+    const result = await getChannel(req.body);
+    console.log('📤 getChannel response:', result);
+    res.json(result);
+  } catch (err: any) {
+    console.error('❌ Ошибка в getChannel:', require('util').inspect(err, { depth: null, colors: true }));
+    res.status(400).json({ error: err.message });
+  }
+});
+
 
     // 3) Раздача клиентской сборки
     app.use(express.static(path.join(__dirname, 'client')));
