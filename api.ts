@@ -1,11 +1,35 @@
 import { db } from "./server/db.ts";
+console.log("✅ import db.ts completed");
+
 import {
   getAuth,
   requestMultimodalModel,
   queueTask,
   getTaskStatus,
 } from "./server/actions";
+console.log("✅ import actions completed");
+
 import { z } from "zod";
+console.log("✅ import zod completed");
+
+import express from 'express';
+console.log("✅ import express completed");
+
+import path from 'path';
+console.log("✅ import path completed");
+
+import { fileURLToPath } from 'url';
+console.log("✅ import fileURLToPath completed");
+
+import util from 'util';
+console.log("✅ import util completed");
+
+// ❗ Удаляем этот дубликат:
+// import { db } from './server/db'; ❌
+
+import { getChannel } from './server/rpc/getChannel';
+console.log("✅ import getChannel completed");
+
 
 // Channel Management
 export async function getChannel(input: { id: string }) {
@@ -1344,13 +1368,6 @@ export async function getGeneratedContent(input: { taskId: string }) {
   }
 }
 // ==== Server bootstrap ====
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import util from 'util';
-import { db } from './server/db';
-import { getChannel } from './server/rpc/getChannel';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
