@@ -1356,7 +1356,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-
+console.log('🪵 LOG BEFORE MAIN FUNCTION');
 (async () => {
   try {
     console.log('🔄 Подключаем базу данных...');
