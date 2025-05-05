@@ -1378,11 +1378,19 @@ app.listen(port, '0.0.0.0', () => {
   console.log(`Server listening on http://0.0.0.0:${port}`);
 });
 // ==========================
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', (reason: any, promise) => {
   console.error('❌ Unhandled Rejection at:', promise);
-  console.error('❌ Rejection reason:', JSON.stringify(reason, null, 2));
+
+  try {
+    console.error('❌ Rejection reason (JSON):', JSON.stringify(reason, null, 2));
+  } catch (e) {
+    console.error('❌ Rejection reason (raw):', reason);
+  }
+
   if (reason instanceof Error) {
-    console.error(reason.stack);
+    console.error('❌ Stack trace:', reason.stack);
+  } else if (typeof reason === 'object') {
+    console.error('❌ Keys in reason object:', Object.keys(reason));
   }
 });
 
